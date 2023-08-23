@@ -1,0 +1,8 @@
+* {
+    margin: 0;
+    scroll-behavior: smooth;
+}
+
+.App {
+    padding: 2vmax;
+}
