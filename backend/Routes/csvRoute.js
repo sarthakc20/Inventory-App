@@ -15,6 +15,6 @@ let storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.route("/import").post(upload.single("file"), importFile);
+router.route("").post(upload.single("csvFile"), importFile);
 
 module.exports = router;

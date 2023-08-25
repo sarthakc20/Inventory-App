@@ -1,21 +1,47 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import Papa from "papaparse";
 import { DataGrid } from "@mui/x-data-grid";
+import { useDispatch, useSelector } from "react-redux";
+import { clearErrors, importCSV } from "./action";
 
 function App() {
+  const dispatch = useDispatch();
+
+  const { error } = useSelector((state) => state.import);
+
   const [data, setdata] = useState([]);
 
   const uploadFileHandler = (e) => {
     e.preventDefault();
-    const file = e.target.files[0];
-    Papa.parse(file, {
-      header: true,
-      complete: (results) => {
-        setdata(results.data);
-      },
-    });
+
+    const fileInput = document.getElementById("fileInput"); // Add an ID to the input element
+
+    const file = fileInput.files[0]; // Access the selected file
+
+    if (file) {
+      const formData = new FormData();
+      formData.append("csvFile", file);
+
+      Papa.parse(file, {
+        header: true,
+        complete: (results) => {
+          setdata(results.data);
+        },
+      });
+      dispatch(importCSV(formData));
+    } else {
+      // If no file is selected
+      alert("No file selected");
+    }
   };
+
+  useEffect(() => {
+    if (error) {
+      alert(error);
+      dispatch(clearErrors());
+    }
+  }, [dispatch, error]);
 
   const columns = [
     { field: "Part", headerName: "Part", minWidth: 200, flex: 1 },
@@ -141,20 +167,23 @@ function App() {
     <>
       <div className="App">
         <h1>CSV Data Table</h1>
-        <input type="file" accept=".csv" onChange={uploadFileHandler} />
+        <form onSubmit={uploadFileHandler}>
+          <input type="file" accept=".csv" id="fileInput" />
+          <button type="submit">Import</button>
+        </form>
       </div>
 
       <div>
         {data.length ? (
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={10}
-          disableSelectionOnClick
-          className="myTable"
-          // autoHeight
-        />
-      ) : null}
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            pageSize={10}
+            disableSelectionOnClick
+            className="myTable"
+            // autoHeight
+          />
+        ) : null}
       </div>
     </>
   );
