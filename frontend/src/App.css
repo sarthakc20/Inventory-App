@@ -6,3 +6,11 @@
 .App {
     padding: 2vmax;
 }
+
+.App > form {
+    padding: 0.5vmax;
+}
+
+.dialog {
+    width: 100%;
+}

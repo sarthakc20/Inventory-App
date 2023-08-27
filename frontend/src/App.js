@@ -3,7 +3,7 @@ import "./App.css";
 import Papa from "papaparse";
 import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, importCSV } from "./action";
+import { clearErrors, deleteRow, getCSVData, importCSV } from "./action";
 import {
   Button,
   Dialog,
@@ -11,11 +11,15 @@ import {
   DialogTitle,
   DialogActions,
 } from "@mui/material";
+import { MdDelete } from "react-icons/md";
+import { DELETE_ROW_RESET } from "./constants";
 
 function App() {
   const dispatch = useDispatch();
 
   const { error } = useSelector((state) => state.import);
+  const { error: deleteError, isDeleted } = useSelector((state) => state.editRow);
+  const { error: getError, csvdata } = useSelector((state) => state.getCSV);
 
   const [data, setdata] = useState([]);
   const [keyword, setKeyword] = useState("");
@@ -44,14 +48,35 @@ function App() {
       // If no file is selected
       alert("No file selected");
     }
+    dispatch(getCSVData());
   };
+
+  const deleteRowHandler = (id) => {
+    dispatch(deleteRow(id));
+  }
 
   useEffect(() => {
     if (error) {
       alert(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, error]);
+
+    if (deleteError) {
+      alert(deleteError);
+      dispatch(clearErrors());
+    }
+
+    if (getError) {
+      alert(getError);
+      dispatch(clearErrors());
+    }
+
+    if (isDeleted) {
+      alert("Row Deleted Successfully");
+      dispatch({ type: DELETE_ROW_RESET });
+    }
+
+  }, [dispatch, error, deleteError, isDeleted, getError]);
 
   const columns = [
     { field: "Part", headerName: "Part", minWidth: 200, flex: 1 },
@@ -147,12 +172,29 @@ function App() {
       minWidth: 150,
       flex: 0.5,
     },
+    {
+      field: "action",
+      flex: 0.3,
+      headerName: "Action",
+      minWidth: 100,
+      type: "number",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Button onClick={() => deleteRowHandler(params.id)}>
+              <MdDelete />
+            </Button>
+          </>
+        );
+      },
+    },
   ];
 
   const rows = [];
 
-  data &&
-    data
+  csvdata &&
+    csvdata
       .filter((item) => {
         return keyword === ""
           ? item
@@ -186,6 +228,10 @@ function App() {
 
   const updateToggle = () => {
     open ? setOpen(false) : setOpen(true);
+  };
+
+  const refreshToggle = () => {
+    dispatch(getCSVData());
   };
 
   const saveUpdateHandler = () => {
@@ -233,20 +279,24 @@ function App() {
         <form className="searchBox" onSubmit={searchFileHandler}>
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search  Part or Alt_Part..."
             onChange={(e) => setKeyword(e.target.value)}
           />
 
-          <input type="submit" value="search" />
+          <input type="submit" value="Search" />
         </form>
 
         <button onClick={updateToggle} className="update">
           Update Inventory
         </button>
+
+        <button onClick={refreshToggle} className="update">
+          Refresh
+        </button>
       </div>
 
       <div>
-        {data.length ? (
+        {csvdata.length ? (
           <DataGrid
             rows={rows}
             columns={columns}
@@ -261,10 +311,11 @@ function App() {
           aria-labelledby="Simple-dialog-title"
           open={open}
           onClose={updateToggle}
+          className="dialog"
         >
           <DialogTitle>Update Inventory</DialogTitle>
           <DialogContent>
-            {data.length ? (
+            {csvdata.length ? (
               <DataGrid
                 rows={rows}
                 columns={updateColumns}

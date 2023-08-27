@@ -1,6 +1,12 @@
 import axios from "axios";
 import {
-    CLEAR_ERRORS,
+  CLEAR_ERRORS,
+  DELETE_ROW_FAIL,
+  DELETE_ROW_REQUEST,
+  DELETE_ROW_SUCCESS,
+  GET_CSV_FAIL,
+  GET_CSV_REQUEST,
+  GET_CSV_SUCCESS,
   IMPORT_CSV_FAIL,
   IMPORT_CSV_REQUEST,
   IMPORT_CSV_SUCCESS,
@@ -26,7 +32,38 @@ export const importCSV = (csvData) => async (dispatch) => {
   }
 };
 
+// Get CSV File
+export const getCSVData = () => async (dispatch) => {
+  try {
+    dispatch({ type: GET_CSV_REQUEST });
+
+    const { data } = await axios.get(`/api/v1`);
+
+    dispatch({ type: GET_CSV_SUCCESS, payload: data.csvdata });
+  } catch (error) {
+    dispatch({ type: GET_CSV_FAIL, payload: error.response.data.message });
+  }
+};
+
+// Delete a Row
+export const deleteRow = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: DELETE_ROW_REQUEST,
+    });
+
+    const { data } = await axios.delete(`api/v1/${id}`);
+
+    dispatch({ type: DELETE_ROW_SUCCESS, payload: data.success });
+  } catch (error) {
+    dispatch({
+      type: DELETE_ROW_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
 // Clearing Errors
 export const clearErrors = () => async (dispatch) => {
-    dispatch({ type: CLEAR_ERRORS });
-  };
+  dispatch({ type: CLEAR_ERRORS });
+};

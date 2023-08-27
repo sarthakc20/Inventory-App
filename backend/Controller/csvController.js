@@ -40,3 +40,33 @@ exports.importFile = async (req, res) => {
     res.send({ status: 400, success: false, message: error.message });
   }
 };
+
+// Get CSV Data
+exports.getFile = async (req, res) => {
+  try {
+    const csvdata = await csvData.find();
+
+    res.status(200).json({
+      success: true,
+      csvdata,
+    });
+  } catch (error) {
+    res.send({ status: 400, success: false, message: error.message });
+  }
+};
+
+// Delete a Row
+exports.deleteRow = async (req, res) => {
+  try {
+    const row = await csvData.findById(req.params.id);
+
+    await row.deleteOne();
+
+    return res.status(200).json({
+      success: true,
+      message: "Row deleted successfully",
+    });
+  } catch (error) {
+    res.send({ status: 400, success: false, message: error.message });
+  }
+};

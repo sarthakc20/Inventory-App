@@ -1,5 +1,12 @@
 import {
   CLEAR_ERRORS,
+  DELETE_ROW_FAIL,
+  DELETE_ROW_REQUEST,
+  DELETE_ROW_RESET,
+  DELETE_ROW_SUCCESS,
+  GET_CSV_FAIL,
+  GET_CSV_REQUEST,
+  GET_CSV_SUCCESS,
   IMPORT_CSV_FAIL,
   IMPORT_CSV_REQUEST,
   IMPORT_CSV_SUCCESS,
@@ -37,3 +44,72 @@ export const importReducer = (state = { csvData: [] }, action) => {
   }
 };
 
+export const getCsvReducer = (state = { csvdata: [] }, action) => {
+  switch (action.type) {
+    case GET_CSV_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_CSV_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        csvdata: action.payload,
+      };
+    case GET_CSV_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const editRowReducer = (state = {}, action) => {
+  switch (action.type) {
+    case DELETE_ROW_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case DELETE_ROW_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isDeleted: action.payload,
+      };
+
+    case DELETE_ROW_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case DELETE_ROW_RESET:
+      return {
+        ...state,
+        isDeleted: false,
+      };
+      
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
