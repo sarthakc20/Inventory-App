@@ -203,7 +203,7 @@ function App() {
       })
       .forEach((item, index) => {
         rows.push({
-          id: index,
+          id: item._id,
           Part: item.Part,
           Alt_Part: item.Alt_Part,
           Name: item.Name,
