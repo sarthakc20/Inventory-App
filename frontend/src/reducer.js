@@ -10,6 +10,10 @@ import {
   IMPORT_CSV_FAIL,
   IMPORT_CSV_REQUEST,
   IMPORT_CSV_SUCCESS,
+  UPDATE_CSV_FAIL,
+  UPDATE_CSV_REQUEST,
+  UPDATE_CSV_RESET,
+  UPDATE_CSV_SUCCESS,
 } from "./constants";
 
 export const importReducer = (state = { csvData: [] }, action) => {
@@ -78,6 +82,7 @@ export const getCsvReducer = (state = { csvdata: [] }, action) => {
 export const editRowReducer = (state = {}, action) => {
   switch (action.type) {
     case DELETE_ROW_REQUEST:
+    case UPDATE_CSV_REQUEST:  
       return {
         ...state,
         loading: true,
@@ -90,7 +95,15 @@ export const editRowReducer = (state = {}, action) => {
         isDeleted: action.payload,
       };
 
+      case UPDATE_CSV_SUCCESS:
+        return {
+          ...state,
+          loading: false,
+          isUpdated: action.payload,
+        };  
+
     case DELETE_ROW_FAIL:
+    case UPDATE_CSV_FAIL:
       return {
         ...state,
         loading: false,
@@ -102,6 +115,12 @@ export const editRowReducer = (state = {}, action) => {
         ...state,
         isDeleted: false,
       };
+
+      case UPDATE_CSV_RESET:
+        return {
+          ...state,
+          isUpdated: false,
+        };  
       
     case CLEAR_ERRORS:
       return {

@@ -55,6 +55,26 @@ exports.getFile = async (req, res) => {
   }
 };
 
+// Update CSV Data
+exports.updateData = async (req, res) => {
+  try {
+    
+    const csvdata = await csvData.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+      useFindModify: false,
+    });
+
+    res.status(200).json({
+      success: true,
+      csvdata,
+    });
+
+  } catch (error) {
+    res.send({ status: 400, success: false, message: error.message });
+  }
+}
+
 // Delete a Row
 exports.deleteRow = async (req, res) => {
   try {

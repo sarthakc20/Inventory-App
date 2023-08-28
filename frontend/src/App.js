@@ -3,7 +3,7 @@ import "./App.css";
 import Papa from "papaparse";
 import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, deleteRow, getCSVData, importCSV } from "./action";
+import { clearErrors, deleteRow, getCSVData, importCSV, updateData } from "./action";
 import {
   Button,
   Dialog,
@@ -12,19 +12,20 @@ import {
   DialogActions,
 } from "@mui/material";
 import { MdDelete } from "react-icons/md";
-import { DELETE_ROW_RESET } from "./constants";
+import { DELETE_ROW_RESET, UPDATE_CSV_RESET } from "./constants";
+import { useParams } from "react-router-dom";
 
 function App() {
   const dispatch = useDispatch();
 
   const { error } = useSelector((state) => state.import);
-  const { error: deleteError, isDeleted } = useSelector((state) => state.editRow);
+  const { error: deleteError, isDeleted, isUpdated } = useSelector((state) => state.editRow);
   const { error: getError, csvdata } = useSelector((state) => state.getCSV);
 
   const [data, setdata] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [open, setOpen] = useState(false);
-  // const [update, setUpdate] = useState("");
+  const [update, setUpdate] = useState();
 
   const uploadFileHandler = (e) => {
     e.preventDefault();
@@ -71,12 +72,17 @@ function App() {
       dispatch(clearErrors());
     }
 
+    if (isUpdated) {
+      alert("Data Updated Successfully");
+      dispatch({ type: UPDATE_CSV_RESET });
+    }
+
     if (isDeleted) {
       alert("Row Deleted Successfully");
       dispatch({ type: DELETE_ROW_RESET });
     }
 
-  }, [dispatch, error, deleteError, isDeleted, getError]);
+  }, [dispatch, error, deleteError, isDeleted, getError, isUpdated]);
 
   const columns = [
     { field: "Part", headerName: "Part", minWidth: 200, flex: 1 },
@@ -234,7 +240,24 @@ function App() {
     dispatch(getCSVData());
   };
 
-  const saveUpdateHandler = () => {
+  const { id } = useParams();
+
+  const saveUpdateHandler = (e) => {
+    e.preventDefault();
+
+    const myForm = new FormData();
+
+    myForm.set("update", update);
+
+    dispatch(updateData(id, myForm));
+
+    // csvdata &&
+    // csvdata.map((item) => {
+    //   if (changes && changes !== false) {
+    //     dispatch(updateData(item._id));
+    //   }
+    // });
+
     setOpen(false); // Close the dialog
   };
   
@@ -313,26 +336,31 @@ function App() {
           onClose={updateToggle}
           className="dialog"
         >
+          <form onSubmit={saveUpdateHandler}>
           <DialogTitle>Update Inventory</DialogTitle>
           <DialogContent>
+            
             {csvdata.length ? (
               <DataGrid
                 rows={rows}
                 columns={updateColumns}
                 pageSize={10}
                 className="myTable"
-                // onChange={(e) => setUpdate(e.target.value)}
+                onChange={(e) => setUpdate(e.target.value)}
               />
             ) : null}
+            
           </DialogContent>
           <DialogActions>
             <Button onClick={updateToggle} color="secondary">
               Close
             </Button>
-            <Button onClick={saveUpdateHandler} color="primary">
+            <Button type="submit" color="primary">
               Save
             </Button>
+            
           </DialogActions>
+          </form>
         </Dialog>
       </div>
     </>

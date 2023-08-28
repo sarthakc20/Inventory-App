@@ -10,6 +10,9 @@ import {
   IMPORT_CSV_FAIL,
   IMPORT_CSV_REQUEST,
   IMPORT_CSV_SUCCESS,
+  UPDATE_CSV_FAIL,
+  UPDATE_CSV_REQUEST,
+  UPDATE_CSV_SUCCESS,
 } from "./constants";
 
 // Import CSV File
@@ -42,6 +45,29 @@ export const getCSVData = () => async (dispatch) => {
     dispatch({ type: GET_CSV_SUCCESS, payload: data.csvdata });
   } catch (error) {
     dispatch({ type: GET_CSV_FAIL, payload: error.response.data.message });
+  }
+};
+
+// Update CSV Data
+export const updateData = (id, csvData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: UPDATE_CSV_REQUEST,
+    });
+
+    const config = {
+      headers: { "Content-Type": "application/json" },
+    };
+
+    const { data } = await axios.put(`api/v1/${id}`, csvData, config);
+
+    dispatch({ type: UPDATE_CSV_SUCCESS, payload: data.success });
+
+  } catch (error) {
+    dispatch({
+      type: UPDATE_CSV_FAIL,
+      payload: error.response.data.message,
+    });
   }
 };
 
