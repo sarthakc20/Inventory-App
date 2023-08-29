@@ -49,7 +49,7 @@ export const getCSVData = () => async (dispatch) => {
 };
 
 // Update CSV Data
-export const updateData = (id, csvData) => async (dispatch) => {
+export const updateData = (csvData) => async (dispatch) => {
   try {
     dispatch({
       type: UPDATE_CSV_REQUEST,
@@ -59,7 +59,7 @@ export const updateData = (id, csvData) => async (dispatch) => {
       headers: { "Content-Type": "application/json" },
     };
 
-    const { data } = await axios.put(`api/v1/${id}`, csvData, config);
+    const { data } = await axios.put(`api/v1/update`, csvData, config);
 
     dispatch({ type: UPDATE_CSV_SUCCESS, payload: data.success });
 

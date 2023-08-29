@@ -19,7 +19,7 @@ router.route("").post(upload.single("csvFile"), importFile);
 
 router.route("").get(getFile);
 
-router.route("/:id").put(updateData);
+router.route("/update").put(updateData);
 
 router.route("/:id").delete(deleteRow);
 

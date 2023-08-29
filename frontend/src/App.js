@@ -3,7 +3,13 @@ import "./App.css";
 import Papa from "papaparse";
 import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, deleteRow, getCSVData, importCSV, updateData } from "./action";
+import {
+  clearErrors,
+  deleteRow,
+  getCSVData,
+  importCSV,
+  updateData,
+} from "./action";
 import {
   Button,
   Dialog,
@@ -13,20 +19,22 @@ import {
 } from "@mui/material";
 import { MdDelete } from "react-icons/md";
 import { DELETE_ROW_RESET, UPDATE_CSV_RESET } from "./constants";
-import { useParams } from "react-router-dom";
 import { CSVLink } from "react-csv";
 
 function App() {
   const dispatch = useDispatch();
 
   const { error } = useSelector((state) => state.import);
-  const { error: deleteError, isDeleted, isUpdated } = useSelector((state) => state.editRow);
+  const {
+    error: deleteError,
+    isDeleted,
+    isUpdated,
+  } = useSelector((state) => state.editRow);
   const { error: getError, csvdata } = useSelector((state) => state.getCSV);
 
   const [data, setdata] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [open, setOpen] = useState(false);
-  const [update, setUpdate] = useState();
 
   console.log(data);
 
@@ -57,7 +65,7 @@ function App() {
 
   const deleteRowHandler = (id) => {
     dispatch(deleteRow(id));
-  }
+  };
 
   useEffect(() => {
     if (error) {
@@ -84,7 +92,6 @@ function App() {
       alert("Row Deleted Successfully");
       dispatch({ type: DELETE_ROW_RESET });
     }
-
   }, [dispatch, error, deleteError, isDeleted, getError, isUpdated]);
 
   const columns = [
@@ -243,27 +250,25 @@ function App() {
     dispatch(getCSVData());
   };
 
-  const { id } = useParams();
-
   const saveUpdateHandler = (e) => {
     e.preventDefault();
 
-    const myForm = new FormData();
+    const formEl = document.forms.updateForm;
 
-    myForm.set("update", update);
+    const formData = new FormData(formEl);
 
-    dispatch(updateData(id, myForm));
-
-    // csvdata &&
-    // csvdata.map((item) => {
-    //   if (changes && changes !== false) {
-    //     dispatch(updateData(item._id));
-    //   }
-    // });
+    // Assuming csvdata is an array of objects
+    if (csvdata && csvdata.length > 0) {
+      csvdata.forEach((item, index) => {
+        // Add Loc_A_Stock and Loc_B_Stock to formData
+        formData.append(`Loc_A_Stock_${index}`, item.Loc_A_Stock);
+        formData.append(`Loc_B_Stock_${index}`, item.Loc_B_Stock);
+      });
+    }
+    dispatch(updateData(formData));
 
     setOpen(false); // Close the dialog
   };
-  
 
   const updateColumns = [
     { field: "Part", headerName: "Part", minWidth: 200, flex: 1 },
@@ -281,7 +286,7 @@ function App() {
       type: "number",
       minWidth: 100,
       flex: 0.5,
-      editable: true
+      editable: true,
     },
     {
       field: "Loc_B_Stock",
@@ -289,41 +294,41 @@ function App() {
       type: "number",
       minWidth: 100,
       flex: 0.5,
-      editable: true
+      editable: true,
     },
   ];
 
   const exportRow = [];
 
-csvdata &&
-  csvdata
-    .filter((item) => {
-      return keyword === ""
-        ? item
-        : (item.Part && item.Part.includes(keyword)) ||
-            (item.Alt_Part && item.Alt_Part.includes(keyword));
-    })
-    .forEach((item, index) => {
-      const rowWithoutId = {
-        Part: item.Part,
-        Alt_Part: item.Alt_Part,
-        Name: item.Name,
-        Brand: item.Brand,
-        Model: item.Model,
-        Engine: item.Engine,
-        Car: item.Car,
-        Loc_A: item.Loc_A,
-        Loc_A_Stock: item.Loc_A_Stock,
-        Loc_B: item.Loc_B,
-        Loc_B_Stock: item.Loc_B_Stock,
-        Unit: item.Unit,
-        Rate: item.Rate,
-        Value: item.Value,
-        Remarks: item.Remarks,
-      };
-      
-      exportRow.push(rowWithoutId);
-    });
+  csvdata &&
+    csvdata
+      .filter((item) => {
+        return keyword === ""
+          ? item
+          : (item.Part && item.Part.includes(keyword)) ||
+              (item.Alt_Part && item.Alt_Part.includes(keyword));
+      })
+      .forEach((item, index) => {
+        const rowWithoutId = {
+          Part: item.Part,
+          Alt_Part: item.Alt_Part,
+          Name: item.Name,
+          Brand: item.Brand,
+          Model: item.Model,
+          Engine: item.Engine,
+          Car: item.Car,
+          Loc_A: item.Loc_A,
+          Loc_A_Stock: item.Loc_A_Stock,
+          Loc_B: item.Loc_B,
+          Loc_B_Stock: item.Loc_B_Stock,
+          Unit: item.Unit,
+          Rate: item.Rate,
+          Value: item.Value,
+          Remarks: item.Remarks,
+        };
+
+        exportRow.push(rowWithoutId);
+      });
 
   return (
     <>
@@ -352,7 +357,7 @@ csvdata &&
           Refresh
         </button>
 
-        <CSVLink data={exportRow}>Export</CSVLink>
+        <CSVLink data={exportRow}>Export CSV</CSVLink>
       </div>
 
       <div>
@@ -363,7 +368,6 @@ csvdata &&
             pageSize={10}
             disableSelectionOnClick
             className="myTable"
-            // autoHeight
           />
         ) : null}
 
@@ -373,30 +377,26 @@ csvdata &&
           onClose={updateToggle}
           className="dialog"
         >
-          <form onSubmit={saveUpdateHandler}>
-          <DialogTitle>Update Inventory</DialogTitle>
-          <DialogContent>
-            
-            {csvdata.length ? (
-              <DataGrid
-                rows={rows}
-                columns={updateColumns}
-                pageSize={10}
-                className="myTable"
-                onChange={(e) => setUpdate(e.target.value)}
-              />
-            ) : null}
-            
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={updateToggle} color="secondary">
-              Close
-            </Button>
-            <Button type="submit" color="primary">
-              Save
-            </Button>
-            
-          </DialogActions>
+          <form onSubmit={saveUpdateHandler} id="updateForm">
+            <DialogTitle>Update Inventory</DialogTitle>
+            <DialogContent className="submitDialogActions">
+              {csvdata.length ? (
+                <DataGrid
+                  rows={rows}
+                  columns={updateColumns}
+                  pageSize={10}
+                  className="myTable"
+                />
+              ) : null}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={updateToggle} color="secondary">
+                Close
+              </Button>
+              <Button type="submit" color="primary">
+                Save
+              </Button>
+            </DialogActions>
           </form>
         </Dialog>
       </div>
