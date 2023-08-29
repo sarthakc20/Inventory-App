@@ -11,6 +11,12 @@
     padding: 0.5vmax;
 }
 
-.dialog {
-    width: 100%;
+.App > a {
+    text-decoration: none;
+    border: 1px solid;
+    color: black;
+    background-color: #efefef;
+    margin: 0.5vmax;
+    padding: 0.1vmax;
+    font-size: 0.9vmax;
 }

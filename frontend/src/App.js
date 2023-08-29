@@ -14,6 +14,7 @@ import {
 import { MdDelete } from "react-icons/md";
 import { DELETE_ROW_RESET, UPDATE_CSV_RESET } from "./constants";
 import { useParams } from "react-router-dom";
+import { CSVLink } from "react-csv";
 
 function App() {
   const dispatch = useDispatch();
@@ -26,6 +27,8 @@ function App() {
   const [keyword, setKeyword] = useState("");
   const [open, setOpen] = useState(false);
   const [update, setUpdate] = useState();
+
+  console.log(data);
 
   const uploadFileHandler = (e) => {
     e.preventDefault();
@@ -290,6 +293,38 @@ function App() {
     },
   ];
 
+  const exportRow = [];
+
+csvdata &&
+  csvdata
+    .filter((item) => {
+      return keyword === ""
+        ? item
+        : (item.Part && item.Part.includes(keyword)) ||
+            (item.Alt_Part && item.Alt_Part.includes(keyword));
+    })
+    .forEach((item, index) => {
+      const rowWithoutId = {
+        Part: item.Part,
+        Alt_Part: item.Alt_Part,
+        Name: item.Name,
+        Brand: item.Brand,
+        Model: item.Model,
+        Engine: item.Engine,
+        Car: item.Car,
+        Loc_A: item.Loc_A,
+        Loc_A_Stock: item.Loc_A_Stock,
+        Loc_B: item.Loc_B,
+        Loc_B_Stock: item.Loc_B_Stock,
+        Unit: item.Unit,
+        Rate: item.Rate,
+        Value: item.Value,
+        Remarks: item.Remarks,
+      };
+      
+      exportRow.push(rowWithoutId);
+    });
+
   return (
     <>
       <div className="App">
@@ -316,6 +351,8 @@ function App() {
         <button onClick={refreshToggle} className="update">
           Refresh
         </button>
+
+        <CSVLink data={exportRow}>Export</CSVLink>
       </div>
 
       <div>

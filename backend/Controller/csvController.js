@@ -2,6 +2,8 @@ const csvData = require("../Model/csvModel");
 
 const csvtojson = require("csvtojson");
 
+const CsvParser = require("json2csv").Parser;
+
 exports.importFile = async (req, res) => {
   try {
     const data = [];
@@ -13,7 +15,6 @@ exports.importFile = async (req, res) => {
           data.push({
             Part: response[i].Part,
             Alt_Part: response[i].Alt_Part,
-            Name: response[i].Name,
             Name: response[i].Name,
             Brand: response[i].Brand,
             Model: response[i].Model,
@@ -58,7 +59,6 @@ exports.getFile = async (req, res) => {
 // Update CSV Data
 exports.updateData = async (req, res) => {
   try {
-    
     const csvdata = await csvData.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -69,11 +69,10 @@ exports.updateData = async (req, res) => {
       success: true,
       csvdata,
     });
-
   } catch (error) {
     res.send({ status: 400, success: false, message: error.message });
   }
-}
+};
 
 // Delete a Row
 exports.deleteRow = async (req, res) => {
@@ -90,3 +89,56 @@ exports.deleteRow = async (req, res) => {
     res.send({ status: 400, success: false, message: error.message });
   }
 };
+
+// // Export CSV File
+// exports.exportFile = async (req, res) => {
+//   try {
+//     const exportCsv = [];
+
+//     const csvdata = await csvData.find({});
+
+//     csvData.forEach((item) => {
+//       const {
+//         Part,
+//         Alt_Part,
+//         Name,
+//         Brand,
+//         Model,
+//         Engine,
+//         Car,
+//         Loc_A,
+//         Loc_A_Stock,
+//         Loc_B,
+//         Loc_B_Stock,
+//         Unit,
+//         Value,
+//         Rate,
+//         Remarks,
+//       } = item;
+//       exportCsv.push({
+//         Part,
+//         Alt_Part,
+//         Name,
+//         Brand,
+//         Model,
+//         Engine,
+//         Car,
+//         Loc_A,
+//         Loc_A_Stock,
+//         Loc_B,
+//         Loc_B_Stock,
+//         Unit,
+//         Value,
+//         Rate,
+//         Remarks,
+//       });
+//     });
+
+//     return res.status(200).json({
+//       success: true,
+//       message: "Row deleted successfully",
+//     });
+//   } catch (error) {
+//     res.send({ status: 400, success: false, message: error.message });
+//   }
+// };
