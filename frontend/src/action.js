@@ -62,7 +62,6 @@ export const updateData = (csvData) => async (dispatch) => {
     const { data } = await axios.put(`api/v1/update`, csvData, config);
 
     dispatch({ type: UPDATE_CSV_SUCCESS, payload: data.success });
-
   } catch (error) {
     dispatch({
       type: UPDATE_CSV_FAIL,

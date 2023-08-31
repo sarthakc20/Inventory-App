@@ -1,22 +1,84 @@
 * {
-    margin: 0;
-    scroll-behavior: smooth;
+  margin: 0;
+  scroll-behavior: smooth;
 }
 
 .App {
-    padding: 2vmax;
+  padding: 2vmax;
 }
 
 .App > form {
-    padding: 0.5vmax;
+  padding: 0.5vmax;
 }
 
 .App > a {
-    text-decoration: none;
-    border: 1px solid;
-    color: black;
-    background-color: #efefef;
-    margin: 0.5vmax;
-    padding: 0.1vmax;
-    font-size: 0.9vmax;
+  text-decoration: none;
+  border: 1px solid;
+  color: black;
+  background-color: #efefef;
+  margin: 0.5vmax;
+  padding: 0.1vmax;
+  font-size: 0.9vmax;
+}
+
+.tableContainer {
+  width: 99%;
+  box-sizing: border-box;
+  border-left: 1px solid rgba(0, 0, 0, 0.158);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-left: 0.5%;
+}
+
+.tableContainer > p {
+  text-align: center;
+  color: #95a2c6;
+}
+
+.myTable div {
+  font: 300 1vmax;
+  color: rgba(0, 0, 0, 0.678);
+  border: none !important;
+}
+
+.myTable button {
+  color: rgba(0, 0, 0, 0.527);
+  transition: all 0.5s;
+}
+
+.myTable button:hover {
+  color: #95a2c6;
+}
+
+.MuiDataGrid-columnHeader {
+  background-color: #95a2c6;
+  padding: 1vmax !important;
+}
+
+.MuiDataGrid-columnHeader div {
+  color: rgb(255, 255, 255);
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.table-header {
+  background-color: #95a2c6;
+  color: white;
+  padding: 10px;
+  text-align: left;
+}
+
+.custom-table td {
+  border: 1px solid #a0a0a0;
+  padding: 10px;
+}
+
+.custom-table > p {
+  color: #a0a0a0c1;
+  text-align: center;
 }

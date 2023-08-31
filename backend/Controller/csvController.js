@@ -56,24 +56,36 @@ exports.getFile = async (req, res) => {
   }
 };
 
-// // Update CSV Data
+// Update CSV Data
 exports.updateData = async (req, res) => {
   try {
-    // Assuming req.body contains the data to update
-    const updatedData = await csvData.updateMany({}, { $set: req.body }, {
-      new: true,
-      runValidators: true,
-      useFindAndModify: false,
-    });
+    const updatedData = req.body;
+
+    // Define an array to store the results of individual updates
+    const updateResults = [];
+
+    for (const item of updatedData) {
+      const { id, ...restItem } = item;
+      const Loc_A_Stock = restItem.locAStock;
+      const Loc_B_Stock = restItem.locBStock;
+      const result = await csvData.updateOne({ _id: id }, { Loc_A_Stock, Loc_B_Stock });
+      updateResults.push(result);
+    }
 
     res.status(200).json({
       success: true,
-      updatedData,
+      data: updatedData,
+      updateResults: updateResults, // Optional: You can send the update results back if needed
     });
   } catch (error) {
-    res.send({ status: 400, success: false, message: error.message });
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
+
+
 
 // Update CSV Data
 // exports.updateData = async (req, res) => {

@@ -35,6 +35,22 @@ function App() {
   const [data, setdata] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [open, setOpen] = useState(false);
+  const [stockChange, setStockChange] = useState([]);
+
+  const updateEffectOnChange = (value, id) => {
+    const existing = stockChange.some((el) => el.id === id);
+    if (!existing) {
+      setStockChange([...stockChange, { id, ...value }]);
+    } else {
+      const modifiedStockChange = stockChange.map((el) => {
+        if (el.id === id) {
+          return { ...el, ...value };
+        }
+        return el;
+      });
+      setStockChange(modifiedStockChange);
+    }
+  };
 
   console.log(data);
 
@@ -56,11 +72,11 @@ function App() {
         },
       });
       dispatch(importCSV(formData));
+      dispatch(getCSVData());
     } else {
       // If no file is selected
       alert("No file selected");
     }
-    dispatch(getCSVData());
   };
 
   const deleteRowHandler = (id) => {
@@ -243,6 +259,7 @@ function App() {
   };
 
   const updateToggle = () => {
+    setStockChange([]);
     open ? setOpen(false) : setOpen(true);
   };
 
@@ -253,57 +270,17 @@ function App() {
   const saveUpdateHandler = (e) => {
     e.preventDefault();
 
-    const formEl = document.forms.updateForm;
-
-    const formData = new FormData(formEl);
-
-    // Assuming csvdata is an array of objects
-    if (csvdata && csvdata.length > 0) {
-      csvdata.forEach((item, index) => {
-        // Add Loc_A_Stock and Loc_B_Stock to formData
-        formData.append(`Loc_A_Stock_${index}`, item.Loc_A_Stock);
-        formData.append(`Loc_B_Stock_${index}`, item.Loc_B_Stock);
-      });
-    }
-    dispatch(updateData(formData));
+    dispatch(updateData(stockChange));
 
     setOpen(false); // Close the dialog
   };
-
-  const updateColumns = [
-    { field: "Part", headerName: "Part", minWidth: 200, flex: 1 },
-    { field: "Alt_Part", headerName: "Alt_Part", minWidth: 200, flex: 1 },
-    {
-      field: "Model",
-      headerName: "Model",
-      type: "number",
-      minWidth: 150,
-      flex: 0.5,
-    },
-    {
-      field: "Loc_A_Stock",
-      headerName: "Loc_A_Stock",
-      type: "number",
-      minWidth: 100,
-      flex: 0.5,
-      editable: true,
-    },
-    {
-      field: "Loc_B_Stock",
-      headerName: "Loc_B_Stock",
-      type: "number",
-      minWidth: 100,
-      flex: 0.5,
-      editable: true,
-    },
-  ];
 
   const exportRow = [];
 
   csvdata &&
     csvdata
       .filter((item) => {
-        return keyword === ""
+        return keyword.length >= 3
           ? item
           : (item.Part && item.Part.includes(keyword)) ||
               (item.Alt_Part && item.Alt_Part.includes(keyword));
@@ -360,7 +337,7 @@ function App() {
         <CSVLink data={exportRow}>Export CSV</CSVLink>
       </div>
 
-      <div>
+      <div className="tableContainer">
         {csvdata.length ? (
           <DataGrid
             rows={rows}
@@ -369,25 +346,64 @@ function App() {
             disableSelectionOnClick
             className="myTable"
           />
-        ) : null}
+        ) : <p>-- No Data Yet --</p>}
 
         <Dialog
           aria-labelledby="Simple-dialog-title"
           open={open}
+          maxWidth="xl"
           onClose={updateToggle}
           className="dialog"
         >
           <form onSubmit={saveUpdateHandler} id="updateForm">
             <DialogTitle>Update Inventory</DialogTitle>
             <DialogContent className="submitDialogActions">
-              {csvdata.length ? (
-                <DataGrid
-                  rows={rows}
-                  columns={updateColumns}
-                  pageSize={10}
-                  className="myTable"
-                />
-              ) : null}
+              <table className="custom-table">
+                <tr>
+                  <th className="table-header">Part</th>
+                  <th className="table-header">Alt_Part</th>
+                  <th className="table-header">Model</th>
+                  <th className="table-header">Loc_A_Stock</th>
+                  <th className="table-header">Loc_B_Stock</th>
+                </tr>
+                {rows.length ? (
+                  rows.map((item, key) => {
+                    return (
+                      <tr key={item.id}>
+                        <td>{item.Part}</td>
+                        <td>{item.Alt_Part}</td>
+                        <td>{item.Model}</td>
+                        <td>
+                          <input
+                            type="number"
+                            onChange={(e) =>
+                              updateEffectOnChange(
+                                { locAStock: e.target.value },
+                                item.id
+                              )
+                            }
+                            defaultValue={item.Loc_A_Stock}
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            onChange={(e) =>
+                              updateEffectOnChange(
+                                { locBStock: e.target.value },
+                                item.id
+                              )
+                            }
+                            defaultValue={item.Loc_B_Stock}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <p>-- No Data Available --</p>
+                )}
+              </table>
             </DialogContent>
             <DialogActions>
               <Button onClick={updateToggle} color="secondary">
