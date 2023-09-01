@@ -279,12 +279,6 @@ function App() {
 
   csvdata &&
     csvdata
-      .filter((item) => {
-        return keyword.length >= 3
-          ? item
-          : (item.Part && item.Part.includes(keyword)) ||
-              (item.Alt_Part && item.Alt_Part.includes(keyword));
-      })
       .forEach((item, index) => {
         const rowWithoutId = {
           Part: item.Part,
@@ -320,7 +314,13 @@ function App() {
           <input
             type="text"
             placeholder="Search  Part or Alt_Part..."
-            onChange={(e) => setKeyword(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value.length >= 3) {
+                setKeyword(e.target.value);
+              } else {
+                setKeyword("");
+              }
+            }}
           />
 
           <input type="submit" value="Search" />

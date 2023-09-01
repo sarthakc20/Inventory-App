@@ -21,7 +21,7 @@
   font-size: 0.9vmax;
 }
 
-.tableContainer {
+/* .tableContainer {
   width: 99%;
   box-sizing: border-box;
   border-left: 1px solid rgba(0, 0, 0, 0.158);
@@ -81,4 +81,4 @@
 .custom-table > p {
   color: #a0a0a0c1;
   text-align: center;
-}
+} */
