@@ -7,21 +7,62 @@
   padding: 2vmax;
 }
 
+.App > h1 {
+  margin-left: 0.8vmax;
+  color: #3D5696;
+}
+
 .App > form {
   padding: 0.5vmax;
 }
 
-.App > a {
+.App > a, button {
+  background-color: #4E6191;
+  color: white;
+  padding: 0.4vmax 1vmax;
+  cursor: pointer;
   text-decoration: none;
-  border: 1px solid;
-  color: black;
-  background-color: #efefef;
-  margin: 0.5vmax;
-  padding: 0.1vmax;
-  font-size: 0.9vmax;
+  margin: 1vmax;
+  transition: all 0.5s;
+  border: none;
 }
 
-/* .tableContainer {
+.update {
+  font-size: 1vmax;
+  padding: 0.5vmax 1.2vmax;
+}
+
+.myInput {
+  padding: 0.5vmax 1vmax;
+  cursor: pointer;
+  margin-left: 0.5vmax;
+  text-decoration: none;
+  border: 1px solid #4E6191;
+}
+
+.searchSug {
+  padding: 0.3vmax 0.5vmax;
+  margin-left: 0.5vmax;
+  color: #737373df;
+}
+
+.search {
+  background-color: #4E6191;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  font-size: 0.9vmax;
+  padding: 0.52vmax 1vmax;
+}
+
+.App > a:hover, button:hover, .search:hover {
+  background-color: #fdefef;
+  color: #4E6191;
+  border: 0.2vamx solid #4E6191;
+}
+
+.tableContainer {
   width: 99%;
   box-sizing: border-box;
   border-left: 1px solid rgba(0, 0, 0, 0.158);
@@ -33,7 +74,7 @@
 
 .tableContainer > p {
   text-align: center;
-  color: #95a2c6;
+  color: #7b7b7b9c;
 }
 
 .myTable div {
@@ -48,11 +89,11 @@
 }
 
 .myTable button:hover {
-  color: #95a2c6;
+  color: #4E6191;
 }
 
 .MuiDataGrid-columnHeader {
-  background-color: #95a2c6;
+  background-color: #4E6191;
   padding: 1vmax !important;
 }
 
@@ -67,7 +108,7 @@
 }
 
 .table-header {
-  background-color: #95a2c6;
+  background-color: #4E6191;
   color: white;
   padding: 10px;
   text-align: left;
@@ -81,4 +122,4 @@
 .custom-table > p {
   color: #a0a0a0c1;
   text-align: center;
-} */
+}

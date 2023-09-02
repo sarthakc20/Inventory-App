@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const path = require("path");
-const { importFile, deleteRow, getFile, updateData } = require("../Controller/csvController");
+const { importFile, deleteRow, getFile, updateData, createDataRow } = require("../Controller/csvController");
 
 let storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -18,6 +18,8 @@ const upload = multer({ storage: storage });
 router.route("").post(upload.single("csvFile"), importFile);
 
 router.route("").get(getFile);
+
+router.route("/create").post(createDataRow);
 
 router.route("/update").put(updateData);
 

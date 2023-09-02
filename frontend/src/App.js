@@ -20,6 +20,10 @@ import {
 import { MdDelete } from "react-icons/md";
 import { DELETE_ROW_RESET, UPDATE_CSV_RESET } from "./constants";
 import { CSVLink } from "react-csv";
+import { FaFileImport } from "react-icons/fa";
+import { FiRefreshCcw } from "react-icons/fi";
+import { FaFileExport } from "react-icons/fa";
+import Create from "./CreateRow.js"
 
 function App() {
   const dispatch = useDispatch();
@@ -114,7 +118,7 @@ function App() {
     { field: "Part", headerName: "Part", minWidth: 200, flex: 1 },
     {
       field: "Alt_Part",
-      headerName: "Alt_Part",
+      headerName: "Alt Part",
       minWidth: 200,
       flex: 1,
     },
@@ -153,27 +157,27 @@ function App() {
     },
     {
       field: "Loc_A",
-      headerName: "Loc_A",
+      headerName: "Loc A",
       type: "number",
       minWidth: 150,
       flex: 0.5,
     },
     {
       field: "Loc_A_Stock",
-      headerName: "Loc_A_Stock",
+      headerName: "Loc A Stock",
       type: "number",
       minWidth: 100,
       flex: 0.5,
     },
     {
       field: "Loc_B",
-      headerName: "Loc_B",
+      headerName: "Loc B",
       minWidth: 150,
       flex: 0.5,
     },
     {
       field: "Loc_B_Stock",
-      headerName: "Loc_B_Stock",
+      headerName: "Loc B Stock",
       type: "number",
       minWidth: 100,
       flex: 0.5,
@@ -278,42 +282,44 @@ function App() {
   const exportRow = [];
 
   csvdata &&
-    csvdata
-      .forEach((item, index) => {
-        const rowWithoutId = {
-          Part: item.Part,
-          Alt_Part: item.Alt_Part,
-          Name: item.Name,
-          Brand: item.Brand,
-          Model: item.Model,
-          Engine: item.Engine,
-          Car: item.Car,
-          Loc_A: item.Loc_A,
-          Loc_A_Stock: item.Loc_A_Stock,
-          Loc_B: item.Loc_B,
-          Loc_B_Stock: item.Loc_B_Stock,
-          Unit: item.Unit,
-          Rate: item.Rate,
-          Value: item.Value,
-          Remarks: item.Remarks,
-        };
+    csvdata.forEach((item, index) => {
+      const rowWithoutId = {
+        Part: item.Part,
+        Alt_Part: item.Alt_Part,
+        Name: item.Name,
+        Brand: item.Brand,
+        Model: item.Model,
+        Engine: item.Engine,
+        Car: item.Car,
+        Loc_A: item.Loc_A,
+        Loc_A_Stock: item.Loc_A_Stock,
+        Loc_B: item.Loc_B,
+        Loc_B_Stock: item.Loc_B_Stock,
+        Unit: item.Unit,
+        Rate: item.Rate,
+        Value: item.Value,
+        Remarks: item.Remarks,
+      };
 
-        exportRow.push(rowWithoutId);
-      });
+      exportRow.push(rowWithoutId);
+    });
 
   return (
     <>
       <div className="App">
         <h1>CSV Data Table</h1>
         <form onSubmit={uploadFileHandler}>
-          <input type="file" accept=".csv" id="fileInput" />
-          <button type="submit">Import</button>
+          <input type="file" accept=".csv" id="fileInput" className="myInput" />
+          <button type="submit" className="update">
+            Import CSV <FaFileImport />
+          </button>
         </form>
 
         <form className="searchBox" onSubmit={searchFileHandler}>
           <input
             type="text"
             placeholder="Search  Part or Alt_Part..."
+            className="myInput"
             onChange={(e) => {
               if (e.target.value.length >= 3) {
                 setKeyword(e.target.value);
@@ -323,18 +329,28 @@ function App() {
             }}
           />
 
-          <input type="submit" value="Search" />
+          <input type="submit" value="Search" className="search" />
         </form>
+        <div className="searchSug">
+          {keyword === ""
+            ? "Please enter at least 3 characters to search..."
+            : ""}
+        </div>
 
         <button onClick={updateToggle} className="update">
           Update Inventory
         </button>
 
         <button onClick={refreshToggle} className="update">
-          Refresh
+          Refresh <FiRefreshCcw />
         </button>
 
-        <CSVLink data={exportRow}>Export CSV</CSVLink>
+        <Create />
+
+        <CSVLink data={exportRow}>
+          Export CSV <FaFileExport />
+        </CSVLink>
+
       </div>
 
       <div className="tableContainer">
@@ -346,7 +362,9 @@ function App() {
             disableSelectionOnClick
             className="myTable"
           />
-        ) : <p>-- No Data Yet --</p>}
+        ) : (
+          <p>-- No Data Yet --</p>
+        )}
 
         <Dialog
           aria-labelledby="Simple-dialog-title"
@@ -361,10 +379,10 @@ function App() {
               <table className="custom-table">
                 <tr>
                   <th className="table-header">Part</th>
-                  <th className="table-header">Alt_Part</th>
+                  <th className="table-header">Alt Part</th>
                   <th className="table-header">Model</th>
-                  <th className="table-header">Loc_A_Stock</th>
-                  <th className="table-header">Loc_B_Stock</th>
+                  <th className="table-header">Loc A Stock</th>
+                  <th className="table-header">Loc B Stock</th>
                 </tr>
                 {rows.length ? (
                   rows.map((item, key) => {
@@ -376,6 +394,7 @@ function App() {
                         <td>
                           <input
                             type="number"
+                            min="0"
                             onChange={(e) =>
                               updateEffectOnChange(
                                 { locAStock: e.target.value },
@@ -388,6 +407,7 @@ function App() {
                         <td>
                           <input
                             type="number"
+                            min="0"
                             onChange={(e) =>
                               updateEffectOnChange(
                                 { locBStock: e.target.value },

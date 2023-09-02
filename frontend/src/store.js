@@ -1,12 +1,13 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { editRowReducer, getCsvReducer, importReducer } from "./reducer";
+import { editRowReducer, getCsvReducer, importReducer, newDataRowReducer } from "./reducer";
 
 const reducer = combineReducers({
   import: importReducer,
   getCSV: getCsvReducer,
   editRow: editRowReducer,
+  createData: newDataRowReducer,
 });
 
 let initialState = {};

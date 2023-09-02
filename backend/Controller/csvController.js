@@ -2,8 +2,7 @@ const csvData = require("../Model/csvModel");
 
 const csvtojson = require("csvtojson");
 
-const CsvParser = require("json2csv").Parser;
-
+// Import CSV File and Insert to Database
 exports.importFile = async (req, res) => {
   try {
     const data = [];
@@ -56,6 +55,20 @@ exports.getFile = async (req, res) => {
   }
 };
 
+// Create a Row 
+exports.createDataRow = async (req, res) => {
+  try {
+    const createData = await csvData.create(req.body);
+
+    res.status(201).json({
+      success: true,
+      createData,
+    });
+  } catch (error) {
+    res.send({ status: 400, success: false, message: error.message });
+  }
+};
+
 // Update CSV Data
 exports.updateData = async (req, res) => {
   try {
@@ -84,26 +97,6 @@ exports.updateData = async (req, res) => {
     });
   }
 };
-
-
-
-// Update CSV Data
-// exports.updateData = async (req, res) => {
-//   try {
-//     const csvdata = await csvData.findByIdAndUpdate(req.params.id, req.body, {
-//       new: true,
-//       runValidators: true,
-//       useFindModify: false,
-//     });
-
-//     res.status(200).json({
-//       success: true,
-//       csvdata,
-//     });
-//   } catch (error) {
-//     res.send({ status: 400, success: false, message: error.message });
-//   }
-// };
 
 // Delete a Row
 exports.deleteRow = async (req, res) => {

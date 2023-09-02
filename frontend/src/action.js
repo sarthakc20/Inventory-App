@@ -1,6 +1,9 @@
 import axios from "axios";
 import {
   CLEAR_ERRORS,
+  CREATE_CSV_FAIL,
+  CREATE_CSV_REQUEST,
+  CREATE_CSV_SUCCESS,
   DELETE_ROW_FAIL,
   DELETE_ROW_REQUEST,
   DELETE_ROW_SUCCESS,
@@ -45,6 +48,29 @@ export const getCSVData = () => async (dispatch) => {
     dispatch({ type: GET_CSV_SUCCESS, payload: data.csvdata });
   } catch (error) {
     dispatch({ type: GET_CSV_FAIL, payload: error.response.data.message });
+  }
+};
+
+// Create Row
+export const createRow = (createData) => async (dispatch) => {
+  try {
+    dispatch({ type: CREATE_CSV_REQUEST });
+
+    const config = {
+      headers: { "Content-Type": "application/json" },
+    };
+
+    const { data } = await axios.post(`/api/v1/create`, createData, config);
+
+    dispatch({
+      type: CREATE_CSV_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: CREATE_CSV_FAIL,
+      payload: error.response.data.message,
+    });
   }
 };
 

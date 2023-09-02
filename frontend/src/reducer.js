@@ -1,5 +1,9 @@
 import {
   CLEAR_ERRORS,
+  CREATE_CSV_FAIL,
+  CREATE_CSV_REQUEST,
+  CREATE_CSV_RESET,
+  CREATE_CSV_SUCCESS,
   DELETE_ROW_FAIL,
   DELETE_ROW_REQUEST,
   DELETE_ROW_RESET,
@@ -74,6 +78,40 @@ export const getCsvReducer = (state = { csvdata: [] }, action) => {
         error: null,
       };
 
+    default:
+      return state;
+  }
+};
+
+export const newDataRowReducer = (state = { createData: {} }, action) => {
+  switch (action.type) {
+    case CREATE_CSV_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case CREATE_CSV_SUCCESS:
+      return {
+        loading: false,
+        success: action.payload.success,
+        createData: action.payload.createData,
+      };
+    case CREATE_CSV_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    case CREATE_CSV_RESET:
+      return {
+        ...state,
+        success: false,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
     default:
       return state;
   }
