@@ -123,3 +123,35 @@
   color: #a0a0a0c1;
   text-align: center;
 }
+
+.createForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+  padding: 3vmax;
+  justify-content: space-evenly;
+  height: 70%;
+  width: 40vh;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.267);
+}
+
+.createForm > div {
+  width: 100%;
+  align-items: center;
+}
+
+.createForm > div input {
+  padding: 1vmax 4vmax;
+  padding-right: 1vmax;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.267);
+  border-radius: 4px;
+  font: 300 0.9vmax Lucida Sans;
+  outline: none;
+  margin-bottom: 1vmax;
+}
+
+

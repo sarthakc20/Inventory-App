@@ -3,7 +3,13 @@ import { MdNoteAdd } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { clearErrors, createRow } from "./action";
 import { CREATE_CSV_RESET } from "./constants";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 
 const CreateRow = () => {
   const dispatch = useDispatch();
@@ -27,7 +33,6 @@ const CreateRow = () => {
   const [rate, setRate] = useState();
   const [value, setValue] = useState();
   const [remarks, setRemarks] = useState("");
-  
 
   useEffect(() => {
     if (error) {
@@ -71,7 +76,6 @@ const CreateRow = () => {
     setOpen(false); // Close the dialog
   };
 
-  
   return (
     <>
       <button className="update" onClick={updateToggle}>
@@ -80,162 +84,205 @@ const CreateRow = () => {
 
       {/* <div className="tableContainer"> */}
 
-        <Dialog
-          aria-labelledby="Simple-dialog-title"
-          open={open}
-          maxWidth="xl"
-          onClose={updateToggle}
-          className="dialog"
-        >
-          <form onSubmit={saveUpdateHandler} id="updateForm">
-            <DialogTitle>Create Inventory</DialogTitle>
-            <DialogContent className="submitDialogActions">
-              
-            <div>  
-              <input
-                type="text"
-                placeholder="Part"
-                value={part}
-                onChange={(e) => setPart(e.target.value)}
-              />
+      <Dialog
+        aria-labelledby="Simple-dialog-title"
+        open={open}
+        maxWidth="xl"
+        onClose={updateToggle}
+        className="dialog"
+      >
+        <form onSubmit={saveUpdateHandler} id="updateForm" className="createForm">
+          <DialogTitle>Create Inventory</DialogTitle>
+          <DialogContent className="submitDialogActions">
+            <div>
+              <p>
+                Part :
+                <input
+                  type="text"
+                  placeholder="Part"
+                  value={part}
+                  onChange={(e) => setPart(e.target.value)}
+                />
+              </p>
             </div>
             <div>
-              <input
-                type="text"
-                placeholder="Alt Part"
-                value={altpart}
-                onChange={(e) => setAltpart(e.target.value)}
-              />
+              <p>
+                Alt Part :
+                <input
+                  type="text"
+                  placeholder="Alt Part"
+                  value={altpart}
+                  onChange={(e) => setAltpart(e.target.value)}
+                />
+              </p>
             </div>
 
             <div>
-            <input
-                type="text"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
+              <p>
+                Name :
+                <input
+                  type="text"
+                  placeholder="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </p>
             </div>
 
             <div>
-            <input
-                type="text"
-                placeholder="Brand"
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
-              />
+              <p>
+                Brand :
+                <input
+                  type="text"
+                  placeholder="Brand"
+                  value={brand}
+                  onChange={(e) => setBrand(e.target.value)}
+                />
+              </p>
             </div>
 
             <div>
-            <input
-                type="text"
-                placeholder="Model"
-                value={model}
-                onChange={(e) => setModel(e.target.value)}
-              />
+              <p>
+                Model :
+                <input
+                  type="text"
+                  placeholder="Model"
+                  value={model}
+                  onChange={(e) => setModel(e.target.value)}
+                />
+              </p>
             </div>
 
             <div>
-            <input
-                type="text"
-                placeholder="Engine"
-                value={engine}
-                onChange={(e) => setEngine(e.target.value)}
-              />
+              <p>
+                Engine :
+                <input
+                  type="text"
+                  placeholder="Engine"
+                  value={engine}
+                  onChange={(e) => setEngine(e.target.value)}
+                />
+              </p>
             </div>
 
             <div>
-            <input
-                type="text"
-                placeholder="Car"
-                value={car}
-                onChange={(e) => setCar(e.target.value)}
-              />
+              <p>
+                Car :
+                <input
+                  type="text"
+                  placeholder="Car"
+                  value={car}
+                  onChange={(e) => setCar(e.target.value)}
+                />
+              </p>
             </div>
 
             <div>
-            <input
-                type="text"
-                placeholder="Loc A"
-                value={locA}
-                onChange={(e) => setLocA(e.target.value)}
-              />
+              <p>
+                Loc A :
+                <input
+                  type="text"
+                  placeholder="Loc A"
+                  value={locA}
+                  onChange={(e) => setLocA(e.target.value)}
+                />
+              </p>
             </div>
 
             <div>
-            <input
-                type="number"
-                placeholder="Loc A Stock"
-                value={locAStock}
-                onChange={(e) => setLocAStock(e.target.value)}
-              />
+              <p>
+                Loc A Stock :
+                <input
+                  type="number"
+                  placeholder="Loc A Stock"
+                  value={locAStock}
+                  onChange={(e) => setLocAStock(e.target.value)}
+                />
+              </p>
             </div>
 
             <div>
-            <input
-                type="text"
-                placeholder="Loc B"
-                value={locB}
-                onChange={(e) => setLocB(e.target.value)}
-              />
+              <p>
+                Loc B :
+                <input
+                  type="text"
+                  placeholder="Loc B"
+                  value={locB}
+                  onChange={(e) => setLocB(e.target.value)}
+                />
+              </p>
             </div>
 
             <div>
-            <input
-                type="number"
-                placeholder="Loc B Stock"
-                value={locBStock}
-                onChange={(e) => setLocBStock(e.target.value)}
-              />
+              <p>
+                Loc B Stock :
+                <input
+                  type="number"
+                  placeholder="Loc B Stock"
+                  value={locBStock}
+                  onChange={(e) => setLocBStock(e.target.value)}
+                />
+              </p>
             </div>
 
             <div>
-            <input
-                type="text"
-                placeholder="Unit"
-                value={unit}
-                onChange={(e) => setUnit(e.target.value)}
-              />
+              <p>
+                Unit :
+                <input
+                  type="text"
+                  placeholder="Unit"
+                  value={unit}
+                  onChange={(e) => setUnit(e.target.value)}
+                />
+              </p>
             </div>
 
             <div>
-            <input
-                type="number"
-                placeholder="Rate"
-                value={rate}
-                onChange={(e) => setRate(e.target.value)}
-              />
+              <p>
+                Rate :
+                <input
+                  type="number"
+                  placeholder="Rate"
+                  value={rate}
+                  onChange={(e) => setRate(e.target.value)}
+                />
+              </p>
             </div>
 
             <div>
-            <input
-                type="number"
-                placeholder="Value"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-              />
+              <p>
+                Value :
+                <input
+                  type="number"
+                  placeholder="Value"
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                />
+              </p>
             </div>
 
             <div>
-            <input
-                type="text"
-                placeholder="Remarks"
-                value={remarks}
-                onChange={(e) => setRemarks(e.target.value)}
-              />
+              <p>
+                Remarks :
+                <input
+                  type="text"
+                  placeholder="Remarks"
+                  value={remarks}
+                  onChange={(e) => setRemarks(e.target.value)}
+                />
+              </p>
             </div>
-
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={updateToggle} color="secondary">
-                Close
-              </Button>
-              <Button type="submit" color="primary">
-                Save
-              </Button>
-            </DialogActions>
-          </form>
-        </Dialog>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={updateToggle} color="secondary">
+              Close
+            </Button>
+            <Button type="submit" color="primary">
+              Save
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
       {/* </div> */}
     </>
   );
