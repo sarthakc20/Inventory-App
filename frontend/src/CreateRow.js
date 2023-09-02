@@ -195,6 +195,7 @@ const CreateRow = () => {
                 <input
                   type="number"
                   placeholder="Loc A Stock"
+                  min="0"
                   value={locAStock}
                   onChange={(e) => setLocAStock(e.target.value)}
                 />
@@ -218,6 +219,7 @@ const CreateRow = () => {
                 Loc B Stock :
                 <input
                   type="number"
+                  min="0"
                   placeholder="Loc B Stock"
                   value={locBStock}
                   onChange={(e) => setLocBStock(e.target.value)}
@@ -254,6 +256,7 @@ const CreateRow = () => {
                 Value :
                 <input
                   type="number"
+                  min="0"
                   placeholder="Value"
                   value={value}
                   onChange={(e) => setValue(e.target.value)}
