@@ -41,6 +41,8 @@ function App() {
   const [open, setOpen] = useState(false);
   const [stockChange, setStockChange] = useState([]);
 
+  const sepKeywords = keyword.split(', ').map((kw) => kw.trim());
+
   const updateEffectOnChange = (value, id) => {
     const existing = stockChange.some((el) => el.id === id);
     if (!existing) {
@@ -230,13 +232,13 @@ function App() {
   const rows = [];
 
   csvdata &&
-    csvdata
-      .filter((item) => {
-        return keyword === ""
-          ? item
-          : (item.Part && item.Part.includes(keyword)) ||
-              (item.Alt_Part && item.Alt_Part.includes(keyword));
-      })
+  csvdata
+    .filter((item) => {
+      return keyword === ""
+        ? item
+        : (item.Part && sepKeywords.some((kw) => item.Part.includes(kw))) ||
+        (item.Alt_Part && sepKeywords.some((kw) => item.Alt_Part.includes(kw)))
+    })
       .forEach((item, index) => {
         rows.push({
           id: item._id,
@@ -260,6 +262,19 @@ function App() {
 
   const searchFileHandler = (e) => {
     e.preventDefault();
+
+    // const keywords = keyword.split(',').map(keyword => keyword.trim());
+
+    // const filteredRows = csvdata.filter((item) => {
+    //   if (keywords.length === 0) return true; // If no keywords provided, show all rows
+
+    //   // Check if any of the keywords match in Part or Alt_Part
+    //   return keywords.some(keyword => (
+    //     (item.Part && item.Part.includes(keyword)) ||
+    //     (item.Alt_Part && item.Alt_Part.includes(keyword))
+    //   ));
+    // });
+    // rows(filteredRows);
   };
 
   const updateToggle = () => {
@@ -321,21 +336,21 @@ function App() {
             placeholder="Search  Part or Alt_Part..."
             className="myInput"
             onChange={(e) => {
-              if (e.target.value.length >= 3) {
+              // if (e.target.value.length >= 3) {
                 setKeyword(e.target.value);
-              } else {
-                setKeyword("");
-              }
+              // } else {
+              //   setKeyword("");
+              // }
             }}
           />
 
           <input type="submit" value="Search" className="search" />
         </form>
-        <div className="searchSug">
+        {/* <div className="searchSug">
           {keyword === ""
             ? "Please enter at least 3 characters to search..."
             : ""}
-        </div>
+        </div> */}
 
         <button onClick={updateToggle} className="update">
           Update Inventory
